@@ -15,11 +15,21 @@ function countTimer(deadline) {
   function getRemaining() {
     let dateNow = new Date().getTime(),
       dateStop = new Date(deadline).getTime(),
-      timeRemaining = (dateStop - dateNow) / 1000,
-      seconds = Math.floor(timeRemaining % 60),
-      minutes = Math.floor((timeRemaining / 60) % 60),
-      hours = Math.floor(timeRemaining / 3600);
-    return { timeRemaining, seconds, minutes, hours };
+      timeRemaining = (dateStop - dateNow) / 1000;
+    if (timeRemaining < 0) {
+      clearInterval(idInterval);
+      timeHours.textContent = "00";
+      timeHours.style.color = "red";
+      timerMinutes.textContent = "00";
+      timerMinutes.style.color = "red";
+      timerSeconds.textContent = "00";
+      timerSeconds.style.color = "red";
+    } else {
+      let seconds = Math.floor(timeRemaining % 60),
+        minutes = Math.floor((timeRemaining / 60) % 60),
+        hours = Math.floor(timeRemaining / 3600);
+      return { timeRemaining, seconds, minutes, hours };
+    }
   }
 
   function updateTimer() {
@@ -32,4 +42,4 @@ function countTimer(deadline) {
 
   function checkTimer() {}
 }
-setInterval(countTimer, 1000, "9 march 2021");
+let idInterval = setInterval(countTimer, 1000, "9 march 2021");
