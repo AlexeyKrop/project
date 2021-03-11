@@ -1,5 +1,6 @@
-"use strict";
-
+window.addEventListener('DOMContentLoaded', () => {
+  "use strict";
+let idInterval;
 function zeroFormat(x) {
   if (x < 10) {
     x = "0" + x;
@@ -7,13 +8,13 @@ function zeroFormat(x) {
   return x;
 }
 
-function countTimer(deadline) {
-  let timeHours = document.querySelector("#timer-hours"),
+const countTimer = (deadline) => {
+  const timeHours = document.querySelector("#timer-hours"),
     timerMinutes = document.querySelector("#timer-minutes"),
     timerSeconds = document.querySelector("#timer-seconds");
 
-  function getRemaining() {
-    let dateNow = new Date().getTime(),
+  const getRemaining = () => {
+    const dateNow = new Date().getTime(),
       dateStop = new Date(deadline).getTime(),
       timeRemaining = (dateStop - dateNow) / 1000;
     if (timeRemaining < 0) {
@@ -30,16 +31,90 @@ function countTimer(deadline) {
         hours = Math.floor(timeRemaining / 3600);
       return { timeRemaining, seconds, minutes, hours };
     }
-  }
+  };
 
-  function updateTimer() {
+  const updateTimer = () => {
     let timer = getRemaining();
     timeHours.textContent = zeroFormat(timer.hours);
     timerMinutes.textContent = zeroFormat(timer.minutes);
     timerSeconds.textContent = zeroFormat(timer.seconds);
-  }
+  };
   updateTimer();
 
   function checkTimer() {}
-}
-let idInterval = setInterval(countTimer, 1000, "9 march 2021");
+};
+  idInterval = setInterval(countTimer, 1000, "20 march 2100");
+
+// меню
+
+const toggleMenu = () => {
+  const openModalBtn = document.querySelector('.menu'),
+    modalMenu = document.querySelector('menu'),
+    closeModalBtn = document.querySelector('.close-btn'),
+    menuItems = document.querySelectorAll('ul>li');
+
+  const handlerMenu = () => {
+    if (!modalMenu.style.transform || modalMenu.style.transform === 'translate(-100%)') {
+        modalMenu.style.transform = 'translate(0)';
+      } else {
+        modalMenu.style.transform = 'translate(-100%)';
+      }
+  };
+
+    openModalBtn.addEventListener('click', handlerMenu);
+    closeModalBtn.addEventListener('click', handlerMenu);
+    menuItems.forEach(element => {
+      element.addEventListener('click', handlerMenu);
+    });
+};
+toggleMenu();
+
+// popup
+
+  const togglePopup = () => {
+    const popupBtn = document.querySelectorAll('.popup-btn'),
+          popup = document.querySelector('.popup'),
+          closePopup = document.querySelector('.popup-close'),
+          popupContent = document.querySelector('.popup-content');
+    let count = 0,
+        animationInterval;  
+     // Анимация  
+    const animation = () => {
+      count ++;
+      animationInterval = requestAnimationFrame(animation); 
+      popupContent.style.position = 'absolute';
+      popupContent.style.left = count + 'px';
+      if (count > 600) {
+        cancelAnimationFrame(animationInterval);
+      }
+  };       
+    popupBtn.forEach(element => {
+      element.addEventListener('click', function(){
+        popup.style.display = 'block';
+        animation();
+      });
+    });
+    closePopup.addEventListener('click', function(){
+      popup.style.display = 'none';
+    });     
+  };
+  togglePopup();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+});
+
