@@ -84,8 +84,9 @@ toggleMenu();
       animationInterval = requestAnimationFrame(animation); 
       popupContent.style.position = 'absolute';
       popupContent.style.left = count + 'px';
-      if (count > 600) {
+      if (count > 600 || document.documentElement.clientWidth < 768) {
         cancelAnimationFrame(animationInterval);
+        popupContent.style.left = 25 + '%';
       }
   };       
     popupBtn.forEach(element => {
@@ -100,7 +101,15 @@ toggleMenu();
   };
   togglePopup();
 
+// прокуртка страницы
 
+const scrolling = () => {
+  const serviceBlock = document.querySelector('#service-block');
+  serviceBlock.addEventListener('click', function(event){
+    event.preventDefault();
+  });
+};
+scrolling();
 
 
 
