@@ -80,13 +80,13 @@ toggleMenu();
         animationInterval;  
      // Анимация  
     const animation = () => {
-      count ++;
+      count++;
       animationInterval = requestAnimationFrame(animation); 
       popupContent.style.position = 'absolute';
-      popupContent.style.left = count + 'px';
-      if (count > 600 || document.documentElement.clientWidth < 768) {
+      popupContent.style.left = count * 8 + 'px';
+      if (count > 70 || document.documentElement.clientWidth < 768) {
         cancelAnimationFrame(animationInterval);
-        popupContent.style.left = 25 + '%';
+        popupContent.style.left = 35 + '%';
       }
   };       
     popupBtn.forEach(element => {
@@ -103,13 +103,7 @@ toggleMenu();
 
 // прокуртка страницы
 
-const scrolling = () => {
-  const serviceBlock = document.querySelector('#service-block');
-  serviceBlock.addEventListener('click', function(event){
-    event.preventDefault();
-  });
-};
-scrolling();
+
 
 
 
