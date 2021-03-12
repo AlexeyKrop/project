@@ -104,11 +104,12 @@ toggleMenu();
 // прокуртка страницы
 
 
-
-
-
-
-
+  const anchorButton = document.querySelector('a[href = "#service-block"]');
+  const anchorsBlock = document.querySelector('.service');
+function scrollToAnchors() {
+   anchorsBlock.scrollIntoView({block: "start", behavior: "smooth"});
+}
+anchorButton.addEventListener('click', scrollToAnchors);
 
 
 
