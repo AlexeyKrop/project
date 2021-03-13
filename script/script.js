@@ -84,9 +84,13 @@ toggleMenu();
       animationInterval = requestAnimationFrame(animation); 
       popupContent.style.position = 'absolute';
       popupContent.style.left = count * 8 + 'px';
-      if (count > 70 || document.documentElement.clientWidth < 768) {
+      if (count > 69) {
         cancelAnimationFrame(animationInterval);
-        popupContent.style.left = 35 + '%';
+      }
+      console.log(count);
+      if (document.documentElement.clientWidth < 768) {
+        cancelAnimationFrame(animationInterval);
+        popupContent.style.left = (document.documentElement.clientWidth / 4) + 'px';
       }
   };       
     popupBtn.forEach(element => {
@@ -97,19 +101,12 @@ toggleMenu();
     });
     closePopup.addEventListener('click', function(){
       popup.style.display = 'none';
+      count = 0;
+      console.log(count);
     });     
   };
   togglePopup();
 
-// прокуртка страницы
-
-
-  const anchorButton = document.querySelector('a[href = "#service-block"]');
-  const anchorsBlock = document.querySelector('.service');
-function scrollToAnchors() {
-   anchorsBlock.scrollIntoView({block: "start", behavior: "smooth"});
-}
-anchorButton.addEventListener('click', scrollToAnchors);
 
 
 
