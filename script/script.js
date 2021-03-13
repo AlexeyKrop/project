@@ -46,6 +46,33 @@ const countTimer = (deadline) => {
 };
 idInterval = setInterval(countTimer, 1000, "20 march 2100");
 
+// прокуртка
+const scrolling = () => {
+  let btnServiceBlock = document.querySelector('main>a>img'),
+      anchors = document.querySelectorAll('menu>ul>li>a');
+      anchors.forEach((anchor) =>{
+        anchor.addEventListener('click', (event) =>{
+          event.preventDefault();
+          const blockToId = anchor.getAttribute('href').substr(1);
+          document.getElementById(blockToId).scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });  
+        });
+      });
+
+  btnServiceBlock.addEventListener('click', (event) => {
+        event.preventDefault();
+        btnServiceBlock = document.querySelector('main>a');    
+        const blockID = btnServiceBlock.getAttribute('href').substr(1);
+        document.getElementById(blockID).scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });  
+  });
+};
+scrolling();
+
 // меню
 const toggleMenu = () => {
 
@@ -75,7 +102,6 @@ toggleMenu();
 const togglePopup = () => {
     const popupBtn = document.querySelectorAll('.popup-btn'),
           popup = document.querySelector('.popup'),
-          closePopup = document.querySelector('.popup-close'),
           popupContent = document.querySelector('.popup-content');
     let count = 0,
         animationInterval;  
@@ -148,8 +174,6 @@ let toggleTabContent = (index) => {
 
 };
 tabs();
-
-
 
 
 
