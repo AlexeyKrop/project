@@ -135,6 +135,7 @@ const togglePopup = () => {
         target = target.closest('.popup-content');
         if(!target){
           popup.style.display = 'none';
+          count = 0;
         }
       }
     });
