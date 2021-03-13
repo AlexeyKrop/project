@@ -51,7 +51,11 @@ const toggleMenu = () => {
   const openModalBtn = document.querySelector('.menu'),
     modalMenu = document.querySelector('menu'),
     closeModalBtn = document.querySelector('.close-btn'),
-    menuItems = document.querySelectorAll('ul>li');
+    menuItems = document.querySelectorAll('ul>li'),
+    globalMenu = document.querySelector('main');
+  modalMenu.addEventListener('click', () => {
+    modalMenu.style.transform = 'translate(-100%)';      
+  });  
 
   const handlerMenu = () => {
     if (!modalMenu.style.transform || modalMenu.style.transform === 'translate(-100%)') {
@@ -61,11 +65,8 @@ const toggleMenu = () => {
       }
   };
 
-    openModalBtn.addEventListener('click', handlerMenu);
-    closeModalBtn.addEventListener('click', handlerMenu);
-    menuItems.forEach(element => {
-      element.addEventListener('click', handlerMenu);
-    });
+  openModalBtn.addEventListener('click', handlerMenu);
+  
 };
 toggleMenu();
 
