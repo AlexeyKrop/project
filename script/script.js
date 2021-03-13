@@ -48,14 +48,9 @@ idInterval = setInterval(countTimer, 1000, "20 march 2100");
 
 // меню
 const toggleMenu = () => {
-  const openModalBtn = document.querySelector('.menu'),
-    modalMenu = document.querySelector('menu'),
-    closeModalBtn = document.querySelector('.close-btn'),
-    menuItems = document.querySelectorAll('ul>li'),
-    globalMenu = document.querySelector('main');
-  modalMenu.addEventListener('click', () => {
-    modalMenu.style.transform = 'translate(-100%)';      
-  });  
+
+const modalMenu = document.querySelector('menu'),
+    globalMenu = document.querySelector('body'); 
 
   const handlerMenu = () => {
     if (!modalMenu.style.transform || modalMenu.style.transform === 'translate(-100%)') {
@@ -65,8 +60,14 @@ const toggleMenu = () => {
       }
   };
 
-  openModalBtn.addEventListener('click', handlerMenu);
-  
+  globalMenu.addEventListener('click', (event) => {
+    let target = event.target;
+    if(target.closest('.menu')){
+      handlerMenu();
+    } else if(target.closest('body')){
+      modalMenu.style.transform = 'translate(-100%)';
+    }   
+  });   
 };
 toggleMenu();
 
