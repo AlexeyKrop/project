@@ -174,11 +174,20 @@ window.addEventListener("DOMContentLoaded", () => {
   const porfolioSlider = () => {
     const potfolioContent = document.querySelector(".portfolio-content"),
       portfolioItem = document.querySelectorAll(".portfolio-item"),
-      btn = document.querySelectorAll(".portfolio-btn"),
-      dot = document.querySelectorAll(".dot");
+      btn = document.querySelectorAll(".portfolio-btn");
     let currentIndex = 0,
+      dots = document.querySelector(".portfolio-dots"),
       interval;
 
+    const newDots = () => {
+      for (let i = 0; i < portfolioItem.length; i++) {
+        let li = document.createElement("li");
+        li.classList.add("dot");
+        dots.append(li);
+      }
+    };
+    newDots();
+    const dot = document.querySelectorAll(".dot");
     const prevSlide = (element, index, strClass) => {
       element[index].classList.remove(strClass);
     };
