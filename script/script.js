@@ -169,4 +169,92 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   };
   tabs();
+
+  // слайдер
+  const porfolioSlider = () => {
+    const potfolioContent = document.querySelector(".portfolio-content"),
+      portfolioItem = document.querySelectorAll(".portfolio-item"),
+      btn = document.querySelectorAll(".portfolio-btn"),
+      dot = document.querySelectorAll(".dot");
+    let currentIndex = 0,
+      interval;
+    // const newDot = () => {
+    //   let li = creat;
+    // };
+
+    const prevSlide = (element, index, strClass) => {
+      element[index].classList.remove(strClass);
+    };
+
+    const nextSlide = (element, index, strClass) => {
+      element[index].classList.add(strClass);
+    };
+
+    const autoPlaySlide = () => {
+      prevSlide(portfolioItem, currentIndex, "portfolio-item-active");
+      prevSlide(dot, currentIndex, "dot-active");
+      currentIndex++;
+      if (currentIndex >= portfolioItem.length) {
+        currentIndex = 0;
+      }
+      nextSlide(portfolioItem, currentIndex, "portfolio-item-active");
+      nextSlide(dot, currentIndex, "dot-active");
+    };
+
+    const startSlide = (time) => {
+      interval = setInterval(autoPlaySlide, time);
+    };
+
+    startSlide(2000);
+
+    potfolioContent.addEventListener("click", (event) => {
+      event.preventDefault();
+      let target = event.target;
+      if (!target.matches("#arrow-left, #arrow-right, .dot")) {
+        return;
+      }
+      prevSlide(portfolioItem, currentIndex, "portfolio-item-active");
+      prevSlide(dot, currentIndex, "dot-active");
+
+      if (target.matches("#arrow-left")) {
+        currentIndex--;
+        if (currentIndex < 0) {
+          currentIndex = portfolioItem.length - 1;
+        }
+      } else if (target.matches("#arrow-right")) {
+        currentIndex++;
+        if (currentIndex >= portfolioItem.length) {
+          currentIndex = 0;
+        }
+      } else if (target.matches(".dot")) {
+        dot.forEach((element, index) => {
+          if (target === element) {
+            currentIndex = index;
+          }
+        });
+      }
+
+      nextSlide(portfolioItem, currentIndex, "portfolio-item-active");
+      nextSlide(dot, currentIndex, "dot-active");
+    });
+
+    const stopSlide = () => {
+      clearInterval(interval);
+    };
+
+    potfolioContent.addEventListener("mouseover", (event) => {
+      let target = event.target;
+      if (target.matches(".dot") || target.matches(".portfolio-btn")) {
+        stopSlide();
+      }
+    });
+
+    porfolioSlider.addEventListener("mouseout", (event) => {
+      let target = event.target;
+      if (target.matches(".dot") || target.matches(".portfolio-btn")) {
+        startSlide();
+      }
+    });
+  };
+  porfolioSlider();
 });
