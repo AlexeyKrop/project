@@ -178,9 +178,6 @@ window.addEventListener("DOMContentLoaded", () => {
       dot = document.querySelectorAll(".dot");
     let currentIndex = 0,
       interval;
-    // const newDot = () => {
-    //   let li = creat;
-    // };
 
     const prevSlide = (element, index, strClass) => {
       element[index].classList.remove(strClass);
@@ -201,11 +198,9 @@ window.addEventListener("DOMContentLoaded", () => {
       nextSlide(dot, currentIndex, "dot-active");
     };
 
-    const startSlide = (time) => {
+    const startSlide = (time = 3000) => {
       interval = setInterval(autoPlaySlide, time);
     };
-
-    startSlide(2000);
 
     potfolioContent.addEventListener("click", (event) => {
       event.preventDefault();
@@ -243,18 +238,23 @@ window.addEventListener("DOMContentLoaded", () => {
     };
 
     potfolioContent.addEventListener("mouseover", (event) => {
-      let target = event.target;
-      if (target.matches(".dot") || target.matches(".portfolio-btn")) {
+      if (
+        event.target.matches(".portfolio-btn") ||
+        event.target.matches(".dot")
+      ) {
         stopSlide();
       }
     });
 
-    porfolioSlider.addEventListener("mouseout", (event) => {
-      let target = event.target;
-      if (target.matches(".dot") || target.matches(".portfolio-btn")) {
+    potfolioContent.addEventListener("mouseout", (event) => {
+      if (
+        event.target.matches(".portfolio-btn") ||
+        event.target.matches(".dot")
+      ) {
         startSlide();
       }
     });
+    startSlide(2000);
   };
   porfolioSlider();
 });
