@@ -303,7 +303,7 @@ window.addEventListener("DOMContentLoaded", () => {
       if (target.placeholder === "Ваше имя") {
         target.value = target.value.replace(/[^a-zа-яё\- ]/gi, "");
       } else if (target.placeholder === "E-mail") {
-        target.value = target.value.replace(/[^a-z\!.@_~\-'*]/gi, "");
+        target.value = target.value.replace(/[^a-z\!.@_~\-'*]/gi, "").trim();
       } else if (target.placeholder === "Номер телефона") {
         target.value = target.value.replace(/[^0-9\()-]/g, "");
       }
@@ -321,7 +321,7 @@ window.addEventListener("DOMContentLoaded", () => {
           target.value.trim().slice(0, 1).toUpperCase() +
           target.value.trim().slice(1).toLowerCase();
       } else if (target.matches(".form-email")) {
-        target.value = target.value.replace(/[^\w\s\@\ \-]|(.)(?=\1)/gi, " ");
+        target.value = target.value.replace(/[^\w\s+\@\ \-]|(.)(?=\1)/gi, "");
       }
     });
   };
