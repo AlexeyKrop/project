@@ -269,26 +269,61 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // функция смена фотографий
   const changePhoto = () => {
-    const arrAtr = [];
-    const img = document.querySelectorAll(".command__photo");
-    img.forEach((item) => {
-      arrAtr.push(item.src);
+    const commandImg = document.getElementById("command");
+    let currentSrc;
+    commandImg.addEventListener("mouseover", (event) => {
+      let target = event.target;
+      if (target.matches("img")) {
+        currentSrc = target.src;
+        target.src = target.dataset.img;
+        target.dataset.img = currentSrc;
+      }
     });
-
-    img.forEach((item, index) => {
-      item.addEventListener("mouseover", (event) => {
-        let target = event.target;
-        if (event.type === "mouseover") {
-          target.src = target.dataset.img;
-        }
-      });
-      item.addEventListener("mouseout", (event) => {
-        let target = event.target;
-        if (event.type === "mouseout") {
-          target.src = arrAtr[index];
-        }
-      });
+    commandImg.addEventListener("mouseout", (event) => {
+      let target = event.target;
+      if (target.matches("img")) {
+        currentSrc = target.src;
+        target.src = target.dataset.img;
+        target.dataset.img = currentSrc;
+      }
     });
   };
   changePhoto();
+
+  // функция валидации
+  const validation = () => {
+    const calcBlock = document.querySelector(".calc-block"),
+      body = document.querySelector("body");
+    calcBlock.addEventListener("input", (event) => {
+      let target = event.target;
+      target.value = target.value.replace(/[^0-9\.]/g, "");
+    });
+    body.addEventListener("input", (event) => {
+      let target = event.target;
+      if (target.placeholder === "Ваше имя") {
+        target.value = target.value.replace(/[^a-zа-яё\- ]/gi, "");
+      } else if (target.placeholder === "E-mail") {
+        target.value = target.value.replace(/[^a-z\!.@_~\-'*]/gi, "");
+      } else if (target.placeholder === "Номер телефона") {
+        target.value = target.value.replace(/[^0-9\()-]/g, "");
+      }
+    });
+  };
+  validation();
+
+  // функция коррекции введенных данных
+  const checkData = () => {
+    const mainForm = document.querySelector(".main-form");
+    mainForm.addEventListener("focusout", (event) => {
+      let target = event.target;
+      if (target.matches(".form-name")) {
+        target.value =
+          target.value.trim().slice(0, 1).toUpperCase() +
+          target.value.trim().slice(1).toLowerCase();
+      } else if (target.matches(".form-email")) {
+        target.value = target.value.replace(/[^\w\s\@\ \-]|(.)(?=\1)/gi, " ");
+      }
+    });
+  };
+  checkData();
 });
