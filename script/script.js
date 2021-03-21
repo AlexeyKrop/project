@@ -266,4 +266,29 @@ window.addEventListener("DOMContentLoaded", () => {
     startSlide(2000);
   };
   porfolioSlider();
+
+  // функция смена фотографий
+  const changePhoto = () => {
+    const arrAtr = [];
+    const img = document.querySelectorAll(".command__photo");
+    img.forEach((item) => {
+      arrAtr.push(item.src);
+    });
+
+    img.forEach((item, index) => {
+      item.addEventListener("mouseover", (event) => {
+        let target = event.target;
+        if (event.type === "mouseover") {
+          target.src = target.dataset.img;
+        }
+      });
+      item.addEventListener("mouseout", (event) => {
+        let target = event.target;
+        if (event.type === "mouseout") {
+          target.src = arrAtr[index];
+        }
+      });
+    });
+  };
+  changePhoto();
 });
