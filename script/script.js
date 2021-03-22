@@ -292,12 +292,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // функция валидации
   const validation = () => {
-    const calcBlock = document.querySelector(".calc-block"),
-      body = document.querySelector("body");
-    calcBlock.addEventListener("input", (event) => {
-      let target = event.target;
-      target.value = target.value.replace(/[^0-9\.]/g, "");
-    });
+    const body = document.querySelector("body");
     body.addEventListener("input", (event) => {
       let target = event.target;
       if (target.placeholder === "Ваше имя") {
@@ -326,4 +321,54 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   };
   checkData();
+
+  // калькулятор
+
+  const calc = (price) => {
+    const calcBlock = document.querySelector(".calc-block"),
+      calcType = document.querySelector(".calc-type"),
+      calcSquare = document.querySelector(".calc-square"),
+      calcCount = document.querySelector(".calc-count"),
+      calcDay = document.querySelector(".calc-day"),
+      calcTotal = document.getElementById("total");
+    // Функция проверки корректного ввода в калькулятор
+
+    const validationCalc = () => {
+      calcBlock.addEventListener("input", (event) => {
+        let target = event.target;
+        if (target.matches("input")) {
+          target.value = target.value.replace(/\D+/, "");
+        }
+      });
+    };
+    validationCalc();
+    const calcSum = () => {
+      let total = 0,
+        dayValue = 1,
+        countValue = 1,
+        typeValue = calcType.options[calcType.selectedIndex].value,
+        squareValue = +calcSquare.value;
+      if (calcDay.value && calcDay.value < 5) {
+        dayValue *= 2;
+      } else if (calcDay.value && calcDay.value < 10) {
+        dayValue *= 1.5;
+      }
+      if (calcCount.value > 1) {
+        countValue += (calcCount.value - 1) / 10;
+      }
+      if (squareValue && typeValue) {
+        total = typeValue * squareValue * price * dayValue * countValue;
+      }
+
+      calcTotal.textContent = Math.floor(total);
+    };
+
+    calcBlock.addEventListener("change", (event) => {
+      let target = event.target;
+      if (target.matches("input") || target.matches("select")) {
+        calcSum();
+      }
+    });
+  };
+  calc(100);
 });
