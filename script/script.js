@@ -290,34 +290,62 @@ window.addEventListener("DOMContentLoaded", () => {
   };
   changePhoto();
 
-  // функция валидации
+   // функция валидации
   const validation = () => {
-    const body = document.querySelector("body");
-    body.addEventListener("input", (event) => {
-      let target = event.target;
-      if (target.placeholder === "Ваше имя") {
-        target.value = target.value.replace(/[^a-zа-яё\- ]/gi, "");
-      } else if (target.placeholder === "E-mail") {
-        target.value = target.value.replace(/[^a-z\!.@_~\-'*]/gi, "").trim();
-      } else if (target.placeholder === "Номер телефона") {
-        target.value = target.value.replace(/[^0-9\()-]/g, "");
-      }
+    const form = document.querySelectorAll("form");
+    form.forEach((item) => {
+      item.addEventListener("input", (event) => {
+        let target = event.target;
+        if (
+          target.placeholder === "Ваше имя" ||
+          target.placeholder === "Ваше сообщение"
+        ) {
+          target.value = target.value.replace(/[^А-Яа-яЁё\- ]/, "");
+        } else if (
+          target.placeholder === "E-mail" ||
+          target.placeholder === "Ваш E-mail"
+        ) {
+          target.value = target.value.replace(/[^A-Za-z\!.@_~\-'*]/, "");
+        } else if (
+          target.placeholder === "Номер телефона" ||
+          target.placeholder === "Ваш номер телефона"
+        ) {
+          target.value = target.value.replace(/[^0-9\()-]/, "");
+        }
+      });
     });
   };
   validation();
 
   // функция коррекции введенных данных
   const checkData = () => {
-    const mainForm = document.querySelector(".main-form");
-    mainForm.addEventListener("focusout", (event) => {
-      let target = event.target;
-      if (target.matches(".form-name")) {
-        target.value =
-          target.value.trim().slice(0, 1).toUpperCase() +
-          target.value.trim().slice(1).toLowerCase();
-      } else if (target.matches(".form-email")) {
-        target.value = target.value.replace(/[^\w\s+\@\ \-]|(.)(?=\1)/gi, "");
-      }
+    const form = document.querySelectorAll("form");
+    form.forEach((item) => {
+      item.addEventListener("focusout", (event) => {
+        let target = event.target;
+        if (target.placeholder === "Ваше имя") {
+          target.value = target.value.replace(/[\-]/g, "");
+          target.value =
+            target.value.trim().slice(0, 1).toUpperCase() +
+            target.value.trim().slice(1).toLowerCase();
+        } else if (
+          target.placeholder === "E-mail" ||
+          target.placeholder === "Ваш E-mail"
+        ) {
+          target.value = target.value.replace(/[^\w\s+\@\ \-]|(.)(?=\1)/gi, "");
+        } else if (
+          target.placeholder === "Номер телефона" ||
+          target.placeholder === "Ваш номер телефона"
+        ) {
+          target.value = target.value.replace(/[\-()]/g, "")
+          if (target.value.length === 18) {
+            target.value = target.value;
+          } else {
+            alert('Введите корректный номер телефона длиной 11 символов');
+            target.value = '';
+          }
+        }
+      });
     });
   };
   checkData();
@@ -348,6 +376,11 @@ window.addEventListener("DOMContentLoaded", () => {
         countValue = 1,
         typeValue = calcType.options[calcType.selectedIndex].value,
         squareValue = +calcSquare.value;
+      if(typeValue === ''){
+        calcDay.value = '';
+        calcSquare.value = '';
+        calcCount.value = '';
+      }
       if (calcDay.value && calcDay.value < 5) {
         dayValue *= 2;
       } else if (calcDay.value && calcDay.value < 10) {
