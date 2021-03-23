@@ -398,7 +398,23 @@ window.addEventListener("DOMContentLoaded", () => {
         total = typeValue * squareValue * price * dayValue * countValue;
       }
 
-      calcTotal.textContent = Math.floor(total);
+      // функция плавного вывода итогового результата
+      const time = 0.01;
+      const step = 1;
+      function outNum(num, elem) {
+        let n = 0;
+        let t = Math.round(time / (num / step));
+        let interval = setInterval(() => {
+          n = n + step;
+          if (n === num) {
+            clearInterval(interval);
+          }
+          elem.textContent = n;
+        }, t);
+      }
+      if(total > 0){
+        outNum(total,calcTotal )
+      }
     };
 
     calcBlock.addEventListener("change", (event) => {
