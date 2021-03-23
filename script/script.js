@@ -86,7 +86,7 @@ window.addEventListener("DOMContentLoaded", () => {
       let target = event.target;
       if (target.closest(".menu")) {
         handlerMenu();
-      } else if (target.closest("body")) {
+      } else if (target.closest("body") && !target.matches("menu")) {
         modalMenu.classList.remove("active-menu");
       }
     });
@@ -292,32 +292,66 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // функция валидации
   const validation = () => {
-    const body = document.querySelector("body");
-    body.addEventListener("input", (event) => {
-      let target = event.target;
-      if (target.placeholder === "Ваше имя") {
-        target.value = target.value.replace(/[^a-zа-яё\- ]/gi, "");
-      } else if (target.placeholder === "E-mail") {
-        target.value = target.value.replace(/[^a-z\!.@_~\-'*]/gi, "").trim();
-      } else if (target.placeholder === "Номер телефона") {
-        target.value = target.value.replace(/[^0-9\()-]/g, "");
-      }
+    const form = document.querySelectorAll("form");
+    form.forEach((item) => {
+      item.addEventListener("input", (event) => {
+        let target = event.target;
+        if (
+          target.placeholder === "Ваше имя" ||
+          target.placeholder === "Ваше сообщение"
+        ) {
+          target.value = target.value.replace(/[^А-Яа-яЁё\- ]/, "");
+        } else if (
+          target.placeholder === "E-mail" ||
+          target.placeholder === "Ваш E-mail"
+        ) {
+          target.value = target.value.replace(/[^A-Za-z\!.@_~\-'*]/, "");
+        } else if (
+          target.placeholder === "Номер телефона" ||
+          target.placeholder === "Ваш номер телефона"
+        ) {
+          target.value = target.value.replace(/[^0-9\()-]/, "");
+        }
+      });
     });
   };
   validation();
 
   // функция коррекции введенных данных
   const checkData = () => {
-    const mainForm = document.querySelector(".main-form");
-    mainForm.addEventListener("focusout", (event) => {
-      let target = event.target;
-      if (target.matches(".form-name")) {
-        target.value =
-          target.value.trim().slice(0, 1).toUpperCase() +
-          target.value.trim().slice(1).toLowerCase();
-      } else if (target.matches(".form-email")) {
-        target.value = target.value.replace(/[^\w\s+\@\ \-]|(.)(?=\1)/gi, "");
-      }
+    const form = document.querySelectorAll("form");
+    form.forEach((item) => {
+      item.addEventListener("focusout", (event) => {
+        let target = event.target;
+        if (target.placeholder === "Ваше имя") {
+          target.value = target.value
+            .trim()
+            .replace(/[^\s\da-zа-я]/gi, "")
+            .replace(/\s+/g, " ");
+          target.value = target.value
+            .split(" ")
+            .map(function (word) {
+              return word[0].toUpperCase() + word.substr(1);
+            })
+            .join(" ");
+        } else if (
+          target.placeholder === "E-mail" ||
+          target.placeholder === "Ваш E-mail"
+        ) {
+          target.value = target.value.replace(/[^\w\s+\@\ \-]|(.)(?=\1)/gi, "");
+        } else if (
+          target.placeholder === "Номер телефона" ||
+          target.placeholder === "Ваш номер телефона"
+        ) {
+          target.value = target.value.replace(/[\-()]/g, "");
+          if (target.value.length === 11) {
+            target.value = target.value;
+          } else {
+            alert("Введите корректный номер телефона длиной 11 символов");
+            target.value = "";
+          }
+        }
+      });
     });
   };
   checkData();
@@ -332,7 +366,6 @@ window.addEventListener("DOMContentLoaded", () => {
       calcDay = document.querySelector(".calc-day"),
       calcTotal = document.getElementById("total");
     // Функция проверки корректного ввода в калькулятор
-
     const validationCalc = () => {
       calcBlock.addEventListener("input", (event) => {
         let target = event.target;
@@ -348,6 +381,12 @@ window.addEventListener("DOMContentLoaded", () => {
         countValue = 1,
         typeValue = calcType.options[calcType.selectedIndex].value,
         squareValue = +calcSquare.value;
+      if (typeValue === "") {
+        calcDay.value = "";
+        calcSquare.value = "";
+        calcCount.value = "";
+        calcTotal.textContent = 0;
+      }
       if (calcDay.value && calcDay.value < 5) {
         dayValue *= 2;
       } else if (calcDay.value && calcDay.value < 10) {
@@ -360,7 +399,23 @@ window.addEventListener("DOMContentLoaded", () => {
         total = typeValue * squareValue * price * dayValue * countValue;
       }
 
-      calcTotal.textContent = Math.floor(total);
+      // функция плавного вывода итогового результата
+      const time = 0.00001;
+      const step = 1;
+      function outNum(num, elem) {
+        let n = 0;
+        let t = Math.round(time / (num / step));
+        let interval = setInterval(() => {
+          n = n + step;
+          if (n >= num) {
+            clearInterval(interval);
+          }
+          elem.textContent = n;
+        }, t);
+      }
+      if (total > 0) {
+        outNum(total, calcTotal);
+      }
     };
 
     calcBlock.addEventListener("change", (event) => {
