@@ -86,7 +86,7 @@ window.addEventListener("DOMContentLoaded", () => {
       let target = event.target;
       if (target.closest(".menu")) {
         handlerMenu();
-      } else if (target.closest("body")) {
+      } else if (target.closest("body") && !target.matches("menu")) {
         modalMenu.classList.remove("active-menu");
       }
     });
@@ -290,7 +290,7 @@ window.addEventListener("DOMContentLoaded", () => {
   };
   changePhoto();
 
-   // функция валидации
+  // функция валидации
   const validation = () => {
     const form = document.querySelectorAll("form");
     form.forEach((item) => {
@@ -324,10 +324,16 @@ window.addEventListener("DOMContentLoaded", () => {
       item.addEventListener("focusout", (event) => {
         let target = event.target;
         if (target.placeholder === "Ваше имя") {
-          target.value = target.value.replace(/[\-]/g, "");
-          target.value =
-            target.value.trim().slice(0, 1).toUpperCase() +
-            target.value.trim().slice(1).toLowerCase();
+          target.value = target.value
+            .trim()
+            .replace(/[^\s\da-zа-я]/gi, "")
+            .replace(/\s+/g, " ");
+          target.value = target.value
+            .split(" ")
+            .map(function (word) {
+              return word[0].toUpperCase() + word.substr(1);
+            })
+            .join(" ");
         } else if (
           target.placeholder === "E-mail" ||
           target.placeholder === "Ваш E-mail"
@@ -337,12 +343,12 @@ window.addEventListener("DOMContentLoaded", () => {
           target.placeholder === "Номер телефона" ||
           target.placeholder === "Ваш номер телефона"
         ) {
-          target.value = target.value.replace(/[\-()]/g, "")
-          if (target.value.length === 18) {
+          target.value = target.value.replace(/[\-()]/g, "");
+          if (target.value.length === 11) {
             target.value = target.value;
           } else {
-            alert('Введите корректный номер телефона длиной 11 символов');
-            target.value = '';
+            alert("Введите корректный номер телефона длиной 11 символов");
+            target.value = "";
           }
         }
       });
@@ -360,7 +366,6 @@ window.addEventListener("DOMContentLoaded", () => {
       calcDay = document.querySelector(".calc-day"),
       calcTotal = document.getElementById("total");
     // Функция проверки корректного ввода в калькулятор
-
     const validationCalc = () => {
       calcBlock.addEventListener("input", (event) => {
         let target = event.target;
@@ -376,10 +381,10 @@ window.addEventListener("DOMContentLoaded", () => {
         countValue = 1,
         typeValue = calcType.options[calcType.selectedIndex].value,
         squareValue = +calcSquare.value;
-      if(typeValue === ''){
-        calcDay.value = '';
-        calcSquare.value = '';
-        calcCount.value = '';
+      if (typeValue === "") {
+        calcDay.value = "";
+        calcSquare.value = "";
+        calcCount.value = "";
       }
       if (calcDay.value && calcDay.value < 5) {
         dayValue *= 2;
