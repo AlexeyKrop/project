@@ -401,8 +401,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
       // функция плавного вывода итогового результата
       const time = 0.01;
-      const step = 10;
       function outNum(num, elem) {
+         let step;
+        if(calcSquare.value < 100){
+          step = 100;
+        } else if(calcSquare.value >= 100){
+          step = 4000;
+        } 
         let n = 0;
         let t = Math.round(time / (num / step));
         let interval = setInterval(() => {
