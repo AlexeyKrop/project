@@ -400,14 +400,14 @@ window.addEventListener("DOMContentLoaded", () => {
       }
 
       // функция плавного вывода итогового результата
-      const time = 0.00001;
-      const step = 1;
+      const time = 0.01;
+      const step = 10;
       function outNum(num, elem) {
         let n = 0;
         let t = Math.round(time / (num / step));
         let interval = setInterval(() => {
           n = n + step;
-          if (n >= num) {
+          if (n >= Math.round(num)) {
             clearInterval(interval);
           }
           elem.textContent = n;
