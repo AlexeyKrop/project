@@ -296,11 +296,10 @@ window.addEventListener("DOMContentLoaded", () => {
     form.forEach((item) => {
       item.addEventListener("input", (event) => {
         let target = event.target;
-        if (
-          target.placeholder === "Ваше имя" ||
-          target.placeholder === "Ваше сообщение"
-        ) {
-          target.value = target.value.replace(/[^А-Яа-яЁё\- ]/, "");
+        if (target.placeholder === "Ваше имя") {
+          target.value = target.value.replace(/[^А-Яа-яЁё\ ]/, "");
+        } else if (target.placeholder === "Ваше сообщение") {
+          target.value = target.value.replace(/[^А-Яа-яЁё0-9\.\,]/, "");
         } else if (
           target.placeholder === "E-mail" ||
           target.placeholder === "Ваш E-mail"
@@ -310,7 +309,7 @@ window.addEventListener("DOMContentLoaded", () => {
           target.placeholder === "Номер телефона" ||
           target.placeholder === "Ваш номер телефона"
         ) {
-          target.value = target.value.replace(/[^0-9\()-]/, "");
+          maskPhone(".form-phone");
         }
       });
     });
@@ -339,17 +338,6 @@ window.addEventListener("DOMContentLoaded", () => {
           target.placeholder === "Ваш E-mail"
         ) {
           target.value = target.value.replace(/[^\w\s+\@\ \-]|(.)(?=\1)/gi, "");
-        } else if (
-          target.placeholder === "Номер телефона" ||
-          target.placeholder === "Ваш номер телефона"
-        ) {
-          target.value = target.value.replace(/[\-()]/g, "");
-          if (target.value.length === 11) {
-            target.value = target.value;
-          } else {
-            alert("Введите корректный номер телефона длиной 11 символов");
-            target.value = "";
-          }
         }
       });
     });
@@ -402,12 +390,12 @@ window.addEventListener("DOMContentLoaded", () => {
       // функция плавного вывода итогового результата
       const time = 0.01;
       function outNum(num, elem) {
-         let step;
-        if(calcSquare.value < 100){
+        let step;
+        if (calcSquare.value < 100) {
           step = 100;
-        } else if(calcSquare.value >= 100){
+        } else if (calcSquare.value >= 100) {
           step = 4000;
-        } 
+        }
         let n = 0;
         let t = Math.round(time / (num / step));
         let interval = setInterval(() => {
@@ -431,4 +419,54 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   };
   calc(100);
+
+  // отправка формы на сервер
+
+  const errorMessage = "Что то пошло не так...",
+    loadMessage = "Загрузка...",
+    successMessage = "Мы скоро с вами свяжемся";
+
+  const form = document.querySelectorAll("form"),
+    statusMessage = document.createElement("div");
+  statusMessage.style.color = "red";
+  const input = document.querySelector("input");
+
+  form.forEach((item) => {
+    item.addEventListener("submit", (event) => {
+      event.preventDefault();
+      item.appendChild(statusMessage);
+      statusMessage.textContent = loadMessage;
+      const formData = new FormData(item);
+      let body = {};
+      formData.forEach((item, key) => {
+        body[key] = item;
+      });
+      input.textContent = "";
+      postData(
+        body,
+        () => {
+          statusMessage.textContent = successMessage;
+        },
+        (error) => {
+          statusMessage.textContent = errorMessage;
+        }
+      );
+    });
+  });
+  const postData = (body, outputData, errorData) => {
+    const request = new XMLHttpRequest();
+    request.addEventListener("readystatechange", () => {
+      if (request.readyState !== 4) {
+        return;
+      }
+      if (request.status === 200) {
+        outputData();
+      } else {
+        errorData(request.status);
+      }
+    });
+    request.open("POST", "./server.php");
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send(JSON.stringify(body));
+  };
 });
