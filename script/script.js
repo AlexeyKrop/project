@@ -327,12 +327,18 @@ window.addEventListener("DOMContentLoaded", () => {
             .trim()
             .replace(/[^\s\da-zа-я]/gi, "")
             .replace(/\s+/g, " ");
-          target.value = target.value
-            .split(" ")
-            .map(function (word) {
-              return word[0].toUpperCase() + word.substr(1);
-            })
-            .join(" ");
+          if (target.value !== "") {
+            target.value = target.value
+              .split(" ")
+              .map(function (word) {
+                return word[0].toUpperCase() + word.substr(1);
+              })
+              .join(" ");
+          }
+          if (target.value.search(/[^A-Za-z]/)) {
+            alert("Необходимо ввести имя на русском языке");
+            target.value = "";
+          }
         } else if (
           target.placeholder === "E-mail" ||
           target.placeholder === "Ваш E-mail"
@@ -345,7 +351,6 @@ window.addEventListener("DOMContentLoaded", () => {
   checkData();
 
   // калькулятор
-
   const calc = (price) => {
     const calcBlock = document.querySelector(".calc-block"),
       calcType = document.querySelector(".calc-type"),
@@ -421,7 +426,6 @@ window.addEventListener("DOMContentLoaded", () => {
   calc(100);
 
   // отправка формы на сервер
-
   const sendForm = () => {
     const errorMessage = "Что то пошло не так...",
       loadMessage = "Загрузка...",
