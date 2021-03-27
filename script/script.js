@@ -470,6 +470,9 @@ window.addEventListener("DOMContentLoaded", () => {
           () => {
             statusMessage.textContent = successMessage;
             cleanInputs();
+            setTimeout(() => {
+              statusMessage.textContent = "";
+            }, 2500);
           },
           (error) => {
             statusMessage.textContent = errorMessage;
