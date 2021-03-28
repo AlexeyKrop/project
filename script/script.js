@@ -299,7 +299,7 @@ window.addEventListener("DOMContentLoaded", () => {
         if (target.placeholder === "Ваше имя") {
           target.value = target.value.replace(/[^А-Яа-яЁё\ ]/, "");
         } else if (target.placeholder === "Ваше сообщение") {
-          target.value = target.value.replace(/[^А-Яа-яЁё0-9\.\,]/, "");
+          target.value = target.value.replace(/[^А-Яа-яЁё0-9\.\,\!\?\-\:]/, "");
         } else if (
           target.placeholder === "E-mail" ||
           target.placeholder === "Ваш E-mail"
@@ -310,6 +310,9 @@ window.addEventListener("DOMContentLoaded", () => {
           target.placeholder === "Ваш номер телефона"
         ) {
           maskPhone(".form-phone");
+          if (target.value.length === 18) {
+            target.style.border = "2px solid green";
+          }
         }
       });
     });
@@ -336,7 +339,7 @@ window.addEventListener("DOMContentLoaded", () => {
               .join(" ");
           }
           if (target.value.search(/[^A-Za-z]/)) {
-            alert("Необходимо ввести имя на русском языке");
+            // alert("Необходимо ввести имя на русском языке");
             target.value = "";
           }
         } else if (
@@ -344,6 +347,14 @@ window.addEventListener("DOMContentLoaded", () => {
           target.placeholder === "Ваш E-mail"
         ) {
           target.value = target.value.replace(/[^\w\s+\@\ \-]|(.)(?=\1)/gi, "");
+        } else if (
+          target.placeholder === "Номер телефона" ||
+          target.placeholder === "Ваш номер телефона"
+        ) {
+          if (target.value.length !== 18) {
+            target.style.border = "2px solid red";
+            alert("Введите корректный номер телефона");
+          }
         }
       });
     });
@@ -434,14 +445,15 @@ window.addEventListener("DOMContentLoaded", () => {
       statusMessage = document.createElement("div");
     statusMessage.style.color = "red";
 
-    const inputs = document.querySelectorAll("input");
+    const inputs = document.querySelectorAll("input"),
+      popup = document.querySelector(".popup");
 
     const cleanInputs = () => {
       inputs.forEach((item) => {
         item.value = "";
       });
     };
-
+    // настройка отправки
     const postData = (body, outputData, errorData) => {
       const request = new XMLHttpRequest();
       request.addEventListener("readystatechange", () => {
@@ -477,6 +489,9 @@ window.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => {
               statusMessage.textContent = "";
             }, 2500);
+            if (item.matches("#form3")) {
+              popup.style.display = "none";
+            }
           },
           (error) => {
             statusMessage.textContent = errorMessage;
