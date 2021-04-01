@@ -457,21 +457,23 @@ window.addEventListener("DOMContentLoaded", () => {
       });
     };
     // настройка отправки
-    const postData = (body, outputData, errorData) => {
+    const postData = (body) => {
       const request = new XMLHttpRequest();
-      request.addEventListener("readystatechange", () => {
-        if (request.readyState !== 4) {
-          return;
-        }
-        if (request.status === 200) {
-          outputData();
-        } else {
-          errorData(request.status);
-        }
+      return new Promise((resolve, reject) => {
+        request.addEventListener("readystatechange", () => {
+          if (request.readyState !== 4) {
+            return;
+          }
+          if (request.status === 200) {
+            resolve();
+          } else {
+            reject(request.status);
+          }
+        });
+        request.open("POST", "./server.php");
+        request.setRequestHeader("Content-Type", "application/json");
+        request.send(JSON.stringify(body));
       });
-      request.open("POST", "./server.php");
-      request.setRequestHeader("Content-Type", "application/json");
-      request.send(JSON.stringify(body));
     };
 
     form.forEach((item) => {
@@ -484,9 +486,8 @@ window.addEventListener("DOMContentLoaded", () => {
         formData.forEach((item, key) => {
           body[key] = item;
         });
-        postData(
-          body,
-          () => {
+        postData(body)
+          .then(() => {
             statusMessage.textContent = successMessage;
             cleanInputs();
             setTimeout(() => {
@@ -497,11 +498,11 @@ window.addEventListener("DOMContentLoaded", () => {
                 popup.style.display = "none";
               }, 2000);
             }
-          },
-          (error) => {
+          })
+          .catch((error) => {
             statusMessage.textContent = errorMessage;
-          }
-        );
+            console.error(error);
+          });
       });
     });
   };
