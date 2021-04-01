@@ -1,7 +1,7 @@
 window.addEventListener("DOMContentLoaded", () => {
   "use strict";
   let idInterval;
-
+  // добавляет 0 если число меньше 10
   function zeroFormat(x) {
     if (x < 10) {
       x = "0" + x;
@@ -9,6 +9,7 @@ window.addEventListener("DOMContentLoaded", () => {
     return x;
   }
 
+  // счетчик акции
   const countTimer = (deadline) => {
     const timeHours = document.querySelector("#timer-hours"),
       timerMinutes = document.querySelector("#timer-minutes"),
@@ -44,7 +45,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     function checkTimer() {}
   };
-  idInterval = setInterval(countTimer, 1000, "20 march 2100");
+  idInterval = setInterval(countTimer, 1000, "20 march 2110");
 
   // прокуртка
   const scrolling = () => {
@@ -102,7 +103,7 @@ window.addEventListener("DOMContentLoaded", () => {
       animationInterval;
     // Анимация
     const animation = () => {
-      count++;
+      count += 1.2;
       animationInterval = requestAnimationFrame(animation);
       popupContent.style.position = "absolute";
       popupContent.style.left = count * 8 + "px";
@@ -444,7 +445,9 @@ window.addEventListener("DOMContentLoaded", () => {
     const form = document.querySelectorAll("form"),
       statusMessage = document.createElement("div");
     statusMessage.style.color = "red";
-
+    const image = document.createElement("img");
+    image.src = "./images/load.gif";
+    statusMessage.append(image);
     const inputs = document.querySelectorAll("input"),
       popup = document.querySelector(".popup");
 
@@ -488,9 +491,11 @@ window.addEventListener("DOMContentLoaded", () => {
             cleanInputs();
             setTimeout(() => {
               statusMessage.textContent = "";
-            }, 2500);
+            }, 2000);
             if (item.matches("#form3")) {
-              popup.style.display = "none";
+              setTimeout(() => {
+                popup.style.display = "none";
+              }, 2000);
             }
           },
           (error) => {
