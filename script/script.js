@@ -87,7 +87,11 @@ window.addEventListener("DOMContentLoaded", () => {
       let target = event.target;
       if (target.closest(".menu")) {
         handlerMenu();
-      } else if (target.closest("body") && !target.matches("menu")) {
+      } else if (
+        target.closest("body") &&
+        !target.matches("menu") &&
+        !target.matches("li")
+      ) {
         modalMenu.classList.remove("active-menu");
       }
     });
@@ -103,7 +107,7 @@ window.addEventListener("DOMContentLoaded", () => {
       animationInterval;
     // Анимация
     const animation = () => {
-      count += 1.2;
+      count += 1.5;
       animationInterval = requestAnimationFrame(animation);
       popupContent.style.position = "absolute";
       popupContent.style.left = count * 8 + "px";
@@ -291,6 +295,14 @@ window.addEventListener("DOMContentLoaded", () => {
   };
   changePhoto();
 
+  // функция перебора кнопок
+  const getBnt = (bool) => {
+    const allBtn = document.querySelectorAll(".form-btn");
+    allBtn.forEach((item) => {
+      item.disabled = bool;
+    });
+  };
+
   // функция валидации
   const validation = () => {
     const form = document.querySelectorAll("form");
@@ -313,6 +325,7 @@ window.addEventListener("DOMContentLoaded", () => {
           maskPhone(".form-phone");
           if (target.value.length === 18) {
             target.style.border = "2px solid green";
+            getBnt(false);
           }
         }
       });
@@ -355,6 +368,7 @@ window.addEventListener("DOMContentLoaded", () => {
           if (target.value.length !== 18) {
             target.style.border = "2px solid red";
             alert("Введите корректный номер телефона");
+            getBnt(true);
           }
         }
       });
@@ -441,7 +455,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const sendForm = () => {
     const errorMessage = "Что то пошло не так...",
       loadMessage = "Загрузка...",
-      successMessage = "Мы скоро с вами свяжемся";
+      successMessage = "Спасибо...Мы скоро с вами свяжемся";
     const form = document.querySelectorAll("form"),
       statusMessage = document.createElement("div");
     statusMessage.style.color = "red";
@@ -458,22 +472,29 @@ window.addEventListener("DOMContentLoaded", () => {
     };
     // настройка отправки
     const postData = (body) => {
-      const request = new XMLHttpRequest();
-      return new Promise((resolve, reject) => {
-        request.addEventListener("readystatechange", () => {
-          if (request.readyState !== 4) {
-            return;
-          }
-          if (request.status === 200) {
-            resolve();
-          } else {
-            reject(request.status);
-          }
-        });
-        request.open("POST", "./server.php");
-        request.setRequestHeader("Content-Type", "application/json");
-        request.send(JSON.stringify(body));
+      return fetch("./server.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
       });
+      // const request = new XMLHttpRequest();
+      // return new Promise((resolve, reject) => {
+      //   request.addEventListener("readystatechange", () => {
+      //     if (request.readyState !== 4) {
+      //       return;
+      //     }
+      //     if (request.status === 200) {
+      //       resolve();
+      //     } else {
+      //       reject(request.status);
+      //     }
+      //   });
+      //   request.open("POST", "./server.php");
+      //   request.setRequestHeader("Content-Type", "application/json");
+      //   request.send(JSON.stringify(body));
+      // });
     };
 
     form.forEach((item) => {
@@ -487,7 +508,10 @@ window.addEventListener("DOMContentLoaded", () => {
           body[key] = item;
         });
         postData(body)
-          .then(() => {
+          .then((response) => {
+            if (response.status !== 200) {
+              throw new Error("status network not 200");
+            }
             statusMessage.textContent = successMessage;
             cleanInputs();
             setTimeout(() => {
