@@ -10,13 +10,13 @@ import changePhoto from "./modules/changePhoto";
 import validation from "./modules/validation";
 import checkData from "./modules/checkData";
 import sendForm from "./modules/sendForm";
-import getBnt from "./modules/getBnt";
-import maskPhone from "./modules/maskPhone";
-import zeroFormat from "./modules/zeroFormat";
+// import getBnt from "./modules/getBnt";
+// import maskPhone from "./modules/maskPhone";
+// import zeroFormat from "./modules/zeroFormat";
 
 // счетчик акции
 
-let idInterval = setInterval(countTimer, 1000, "20 march 2110");
+let idInterval = setInterval(countTimer, 1000, "07 april 2021");
 
 // прокуртка
 

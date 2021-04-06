@@ -1,3 +1,5 @@
+import maskPhone from "./maskPhone";
+import getBnt from "./getBnt";
 const validation = () => {
   const form = document.querySelectorAll("form");
   form.forEach((item) => {

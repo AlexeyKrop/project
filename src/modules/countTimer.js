@@ -1,3 +1,4 @@
+import zeroFormat from "./zeroFormat";
 const countTimer = (deadline) => {
   const timeHours = document.querySelector("#timer-hours"),
     timerMinutes = document.querySelector("#timer-minutes"),

@@ -1,3 +1,4 @@
+import getBnt from "./getBnt";
 const checkData = () => {
   const form = document.querySelectorAll("form");
   form.forEach((item) => {
