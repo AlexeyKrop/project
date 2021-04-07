@@ -1,9 +1,9 @@
 import zeroFormat from "./zeroFormat";
 const countTimer = (deadline) => {
+  let idInterval;
   const timeHours = document.querySelector("#timer-hours"),
     timerMinutes = document.querySelector("#timer-minutes"),
     timerSeconds = document.querySelector("#timer-seconds");
-  let idInterval;
   // добавляет 0 если число меньше 10
   function zeroFormat(x) {
     if (x < 10) {
@@ -23,6 +23,7 @@ const countTimer = (deadline) => {
       timerMinutes.style.color = "red";
       timerSeconds.textContent = "00";
       timerSeconds.style.color = "red";
+      return { timeRemaining, timerSeconds, timerMinutes, timeHours };
     } else {
       let seconds = Math.floor(timeRemaining % 60),
         minutes = Math.floor((timeRemaining / 60) % 60),
@@ -33,9 +34,11 @@ const countTimer = (deadline) => {
 
   const updateTimer = () => {
     let timer = getRemaining();
-    timeHours.textContent = zeroFormat(timer.hours);
-    timerMinutes.textContent = zeroFormat(timer.minutes);
-    timerSeconds.textContent = zeroFormat(timer.seconds);
+    if (timer.timeRemaining > 0) {
+      timeHours.textContent = zeroFormat(timer.hours);
+      timerMinutes.textContent = zeroFormat(timer.minutes);
+      timerSeconds.textContent = zeroFormat(timer.seconds);
+    }
   };
   updateTimer();
 
