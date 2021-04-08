@@ -25,6 +25,10 @@ const checkData = () => {
         target.placeholder === "E-mail" ||
         target.placeholder === "Ваш E-mail"
       ) {
+        if (target.value.length === 0) {
+          target.style.border = "2px solid red";
+          getBnt(true);
+        }
         target.value = target.value.replace(/[^\w\s+\@\ \-]|(.)(?=\1)/gi, "");
       } else if (
         target.placeholder === "Номер телефона" ||

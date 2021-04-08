@@ -16,7 +16,7 @@ import sendForm from "./modules/sendForm";
 
 // счетчик акции
 
-let idInterval = setInterval(countTimer, 1000, "07 april 2021");
+let idInterval = setInterval(countTimer, 1000, "12 april 2021");
 
 // прокуртка
 

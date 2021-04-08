@@ -13,6 +13,10 @@ const validation = () => {
         target.placeholder === "E-mail" ||
         target.placeholder === "Ваш E-mail"
       ) {
+        if (target.value.length > 4) {
+          target.style.border = "2px solid green";
+          getBnt(false);
+        }
         target.value = target.value.replace(/[^A-Za-z\!.@_~\-'*]/, "");
       } else if (
         target.placeholder === "Номер телефона" ||
