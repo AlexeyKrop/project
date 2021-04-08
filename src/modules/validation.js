@@ -1,7 +1,11 @@
 import maskPhone from "./maskPhone";
 import getBnt from "./getBnt";
 const validation = () => {
-  const form = document.querySelectorAll("form");
+  const form = document.querySelectorAll("form"),
+    input = document.querySelectorAll("input");
+  input.forEach((item) => {
+    item.setAttribute("required", true);
+  });
   form.forEach((item) => {
     item.addEventListener("input", (event) => {
       let target = event.target;
